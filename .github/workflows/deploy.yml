@@ -4,11 +4,11 @@ on:
     branches:
       - main
       - dev
-env:
+env: #env variables set at workflow level available to all jobs unless overridden at job/step level
   MONGODB_DB_NAME: gha-demo
 jobs:
   test:
-    env:
+    env: #env vars specified at job level only available in that job
       MONGODB_CLUSTER_ADDRESS: cluster0.m4flcnr.mongodb.net
       MONGODB_USERNAME: iankatsuno
       MONGODB_PASSWORD: iGbtZ64TYfJCG1CT
@@ -30,11 +30,12 @@ jobs:
       - name: Run tests
         run: npm test
       - name: Output information
-        run: echo "..."
+        run: echo "MONGODB_USERNAME: ${{env.MONGODB.USERNAME}}"
   deploy:
     needs: test
     runs-on: ubuntu-latest
     steps:
       - name: Output information
         run: |        
-          echo "..."
+          echo "MONGODB_USERNAME: ${{env.MONGODB_USERNAME}}"
+          echo "MONGODB_USERNAME: ${{env.MONGODB_DB_NAME}}"
